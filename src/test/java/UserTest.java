@@ -6,14 +6,15 @@ import org.junit.jupiter.api.Test;
 public class UserTest {
     private static final String LOGIN_TEST = "user";
     private static final String CORRECT_EMAIL_TEST = "user@mail.ru";
+    private static final String NOT_CORRECT_EMAIL_TEST = "user@mailru";
 
 
 
     @Test
     public void shouldBeLoginAndEmail() {
         User user = new User(LOGIN_TEST, CORRECT_EMAIL_TEST);
-        Assertions.assertFalse(StringUtils.isEmpty(user.getLogin()));
-        Assertions.assertFalse(StringUtils.isEmpty(user.getEmail()));
+        Assertions.assertEquals(LOGIN_TEST, user.getLogin());
+        Assertions.assertEquals(CORRECT_EMAIL_TEST, user.getEmail());
     }
 
     @Test
@@ -25,14 +26,11 @@ public class UserTest {
 
     @Test
     public void shouldBeCorrectEmail() {
-        User user = new User(LOGIN_TEST, CORRECT_EMAIL_TEST);
-        Assertions.assertTrue(StringUtils.containsAny("@", user.getEmail()));
-        Assertions.assertTrue(StringUtils.containsAny(".", user.getEmail()));
+        Assertions.assertThrowsExactly(RuntimeException.class, () -> new User(LOGIN_TEST, NOT_CORRECT_EMAIL_TEST));
     }
 
     @Test
     public void shouldBeDifferentLoginAndEmail() {
-        User user = new User(LOGIN_TEST, CORRECT_EMAIL_TEST);
-        Assertions.assertNotEquals(user.getEmail(), user.getLogin());
+        Assertions.assertThrowsExactly(RuntimeException.class, () -> new User(CORRECT_EMAIL_TEST, CORRECT_EMAIL_TEST));
     }
 }

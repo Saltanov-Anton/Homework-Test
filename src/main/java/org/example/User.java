@@ -1,5 +1,7 @@
 package org.example;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class User {
     private String login;
 
@@ -9,8 +11,15 @@ public class User {
     }
 
     public User(String login, String email) {
-        this.login = login;
+
+        if (!StringUtils.containsAny("@", email) || !StringUtils.containsAny(".", email)) {
+            throw new RuntimeException("Некорректный email");
+        } else if (login.equals(email)) {
+            throw new RuntimeException("Логин и email одинаковые");
+        }
         this.email = email;
+        this.login = login;
+
     }
 
     public String getLogin() {
